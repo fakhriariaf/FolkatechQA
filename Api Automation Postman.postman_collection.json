@@ -1,0 +1,259 @@
+{
+	"info": {
+		"_postman_id": "04e06e16-a228-438f-abac-f45c26d9b902",
+		"name": "Api Automation Postman",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16872034"
+	},
+	"item": [
+		{
+			"name": "login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const response = pm.response.json();\r",
+							"pm.environment.set(\"token\", response.data.token);\r",
+							"\r",
+							"pm.test(\"Response memiliki struktur JSON yang valid\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    // Verifikasi keberadaan key tertentu\r",
+							"    pm.expect(responseData).to.have.property(\"code\");\r",
+							"    pm.expect(responseData).to.have.property(\"message\");\r",
+							"    pm.expect(responseData).to.have.property(\"success\");\r",
+							"\r",
+							"    // Verifikasi struktur nested object\r",
+							"    if (responseData.data) {\r",
+							"        pm.expect(responseData.data).to.have.property(\"id\");\r",
+							"        pm.expect(responseData.data).to.have.property(\"role_id\");\r",
+							"        pm.expect(responseData.data).to.have.property(\"name\");\r",
+							"        pm.expect(responseData.data).to.have.property(\"alias\");\r",
+							"        pm.expect(responseData.data).to.have.property(\"email\");\r",
+							"        pm.expect(responseData.data).to.have.property(\"email_verified_at\");\r",
+							"        pm.expect(responseData.data).to.have.property(\"image_profile\");\r",
+							"        pm.expect(responseData.data).to.have.property(\"reg_id\");\r",
+							"        pm.expect(responseData.data).to.have.property(\"created_at\");\r",
+							"        pm.expect(responseData.data).to.have.property(\"updated_at\");\r",
+							"        pm.expect(responseData.data).to.have.property(\"deleted_at\");\r",
+							"        pm.expect(responseData.data).to.have.property(\"provider_name\");\r",
+							"        pm.expect(responseData.data).to.have.property(\"provider_id\");\r",
+							"        pm.expect(responseData.data).to.have.property(\"phone_number\");\r",
+							"        pm.expect(responseData.data).to.have.property(\"token\");\r",
+							"        pm.expect(responseData.data).to.have.property(\"last_login\");\r",
+							"        pm.expect(responseData.data).to.have.property(\"is_active\");\r",
+							"        pm.expect(responseData.data).to.have.property(\"token_forgot\");\r",
+							"        pm.expect(responseData.data).to.have.property(\"province_id\");\r",
+							"        pm.expect(responseData.data).to.have.property(\"spv_access\");\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"packages": {},
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n \"reg_id\": \"12346\",\r\n  \"email\": \"admin@example.com\",\r\n  \"password\": \"password\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/login",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "positive case - Buat laporan baru",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response status is true\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    pm.expect(responseData.status).to.eql(true);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has success message\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    pm.expect(responseData.message).to.eql(\"Data laporan berhasil dikirim.\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response memiliki struktur JSON yang valid\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    // Verifikasi keberadaan key tertentu\r",
+							"    pm.expect(responseData).to.have.property(\"status\");\r",
+							"    pm.expect(responseData).to.have.property(\"message\");\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"packages": {},
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    //   \"reg_id\": \"12346\", \r\n  \"report_category_id\":\"6\",\r\n  \"fullname\":\"Fakhri\",\r\n  \"gender\": \"1\",\r\n  \"province_id\": \"1\",\r\n  \"tipe_korban\": \"Begitulah\",\r\n  \"description\" : \"Laporan sembako\",\r\n  \"lat\" : \"03489343\",\r\n  \"lng\" : \"8327832\",\r\n  \"address_location\" : \"bandung\",\r\n  \"urgency\": \"Tinggi\"\r\n\r\n}\r\n\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/report",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"report"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Negativecase - Buat laporan baru",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response status is true\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    pm.expect(responseData.status).to.eql(true);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has success message\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    pm.expect(responseData.message).to.eql(\"Data laporan berhasil dikirim.\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response memiliki struktur JSON yang valid\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    // Verifikasi keberadaan key tertentu\r",
+							"    pm.expect(responseData).to.have.property(\"status\");\r",
+							"    pm.expect(responseData).to.have.property(\"message\");\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"packages": {},
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    //   \"reg_id\": \"12346\", \r\n  \"report_category_id\":\"6\",\r\n  \"fullname\":\"Fakhri\",\r\n  \"gender\": \"1\",\r\n  \"province_id\": \"1\",\r\n  \"tipe_korban\": \"Begitulah\",\r\n  \"description\" : \"Laporan sembako\",\r\n  \"lat\" : \"03489343\",\r\n  \"lng\" : \"8327832\",\r\n  \"address_location\" : \"bandung\",\r\n  \"urgency\": \"Tinggi\"\r\n\r\n}\r\n\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/report",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"report"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
