@@ -1,5 +1,6 @@
 export default class loginPage {
-    usernameInput   = '#user-name';
-    passwordInput   = '#password';
-    loginButton     = '#login-button';
+    emailInput      = "input[type='email']";
+    passwordInput   = "input[type='password']";
+    loginButton     = "button[type='submit']";
+    errorMessage    = "label[role='alert']"
 }

@@ -8,24 +8,36 @@ export default class LoginActions {
     constructor(page) {
         this.page = page;
         this.loginPage = new loginPage();
-        this.usernameInput = page.locator(this.loginPage.usernameInput);
+        this.emailInput = page.locator(this.loginPage.emailInput);
         this.passwordInput = page.locator(this.loginPage.passwordInput);
         this.loginButton = page.locator(this.loginPage.loginButton);
+        this.errorMessage = page.locator(this.loginPage.errorMessage);
+
+        this.validEmail = 'admin@example.com';
+        this.validPassword = 'password';
     }
 
     async goto() {
-        await this.page.goto('https://www.saucedemo.com/');
+        await this.page.goto('https://lapor.folkatech.com/');
+        await this.page.waitForTimeout(2000);
     }
 
-    async login() {
-        await this.usernameInput.fill('standard_user');
-        await expect(this.usernameInput).toHaveValue('standard_user');
-        await this.passwordInput.fill('secret_sauce');
-        await expect(this.passwordInput).toHaveValue('secret_sauce');
+    async validLogin() {
+        await this.emailInput.fill(this.validEmail);
+        await this.passwordInput.fill(this.validPassword);
         await this.loginButton.click();
+        await this.page.waitForTimeout(2000);
 
-        await expect.toHaveURL('https://www.saucedemo.com/inventory.html');
+        await expect(this.page).toHaveURL('https://lapor.folkatech.com/admin/dashboard');
+    }
 
+    async invalidLogin(email, password, expectedError) {
+        await this.emailInput.fill(email);
+        await this.passwordInput.fill(password);
+        await this.loginButton.click();
+        await this.page.waitForTimeout(2000);
 
+        await expect(this.errorMessage).toBeVisible();
+        await expect(this.errorMessage).toHaveText(expectedError);
     }
 }
